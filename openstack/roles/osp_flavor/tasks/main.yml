@@ -1,0 +1,13 @@
+---
+# OSP FLAVOR Role
+- name: OSP FLAVOR - Ensure test flavor is created
+  os_nova_flavor:
+    cloud: "{{ cloud_conn_name }}"
+    state: present
+    name: test.small
+    ram: 2048
+    vcpus: 1
+    disk: 10
+  tags:
+    - osp_flavor_create_flavor
+...

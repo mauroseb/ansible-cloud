@@ -1,0 +1,5 @@
+---
+instance_name: frontend
+instance_group: frontends
+deployment_env: QA
+#security_group_name: frontend_servers

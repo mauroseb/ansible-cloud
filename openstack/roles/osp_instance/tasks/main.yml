@@ -1,0 +1,48 @@
+---
+# OSP INSTANCE Role
+- name: OSP INSTANCE - Ensure instance  {{ instance_name }} is created
+  os_server:
+    cloud: "{{ cloud_conn_name }}"
+    name: "{{ instance_name }}"
+    image: rhel-guest
+    meta: "group={{ instance_group }},deployment_name={{ deployment_env }}"
+    flavor: test.small
+    security_groups: SG_test_app
+    key_name: testkey1
+    wait: yes
+    nics:
+    - net-name: int_network
+    userdata: |
+      #!/bin/bash
+      curl -o /home/cloud-user/.ssh/authorized_keys http://www.opentlc.com/download/ansible_bootcamp/openstack_keys/openstack.pub
+      curl -o /etc/yum.repos.d/internal.repo http://www.opentlc.com/download/ansible_bootcamp/repo/internal.repo
+  register: instanceip
+  tags:
+    - ops_instance_create_instance
+
+- name: OSP INSTANCE - Ensure floating IP is created and mapped to "{{ instance_name }}"
+  os_floating_ip:
+    cloud: "{{ cloud_conn_name }}"
+    state: present
+    reuse: yes
+    server: "{{ instance_name }}"
+    network: ext_network
+    wait: true
+    timeout: 180
+  register: instancefloatingip
+  tags:
+    - ops_instance_create_instance_floatingip
+
+- name: OSP INSTANCE - Show IPs created for "{{ instance_name }}"
+  debug: " Floating IP: {{ instancefloatingip.floating_ip.floating_ip_address }}"
+
+- name: OSP INSTANCE - Wait for intance to "{{ instance_name }}"
+  wait_for:
+    host: "{{ instancefloatingip.floating_ip.floating_ip_address }}"
+    port: 22
+    search_regex: OpenSSH
+    timeout: 600
+  delegate_to: "{{ inventory_hostname }}"
+  tags:
+    - ops_instance_create_instance_wait
+...

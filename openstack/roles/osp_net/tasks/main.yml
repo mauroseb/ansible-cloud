@@ -1,0 +1,77 @@
+---
+# OSP NET Role
+- name: OSP NET - Create an external network
+  os_network:
+    cloud: "{{ cloud_conn_name }}"
+    state: present
+    name: ext_network
+    external: true
+  register: osp_net_ext_net_res
+  tags:
+    - osp_net_ext_net
+
+- name: OSP NET - Create an external subnet
+  os_subnet:
+    cloud: "{{ cloud_conn_name }}"
+    state: present
+    network_name: ext_network
+    name: external_subnet
+    cidr: 10.10.10.0/24
+    dns_nameservers:
+       - 8.8.8.7
+       - 8.8.8.8
+    host_routes:
+       - destination: 0.0.0.0/0
+         nexthop: 10.10.10.1
+#       - destination: 192.168.0.0/24
+#         nexthop: 192.168.0.1
+  register: osp_net_ext_subnet_res
+#  when: osp_net_ext_net_res.rc == 0
+  tags:
+    - osp_net_ext_subnet
+
+- name: OSP NET - Create an internal network
+  os_network:
+    cloud: "{{ cloud_conn_name }}"
+    state: present
+    name: int_network
+    external: false
+  register: osp_net_int_net_res
+  tags:
+   - osp_net_int_net
+
+- name: OSP NET - Create an internal subnet
+  os_subnet:
+    cloud: "{{ cloud_conn_name }}"
+    state: present
+    network_name: int_network
+    name: int_subnet
+    cidr: 20.20.20.0/24
+    dns_nameservers:
+       - 8.8.8.7
+       - 8.8.8.8
+#    host_routes:
+#       - destination: 0.0.0.0/0
+#         nexthop: 192.168.0.0
+#       - destination: 192.168.0.0/24
+#         nexthop: 192.168.0.0
+#  when: osp_net_int_net_res.rc == 0
+  register: osp_net_int_subnet_res
+  tags:
+   - osp_net_int_subnet
+
+- name: OSP NET - Create a router using previous networks
+  os_router:
+    cloud: "{{ cloud_conn_name }}"
+    state: present
+    name: router1
+    network: ext_network
+    external_fixed_ips:
+      - subnet: external_subnet
+    interfaces:
+      - int_subnet
+#  when: osp_net_int_subnet_res.rc == 0 and osp_net_ext_subnet_res.rc == 0
+  tags:
+    - osp_net_router_create
+
+
