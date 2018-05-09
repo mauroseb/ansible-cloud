@@ -1,0 +1,7 @@
+---
+instance_name: app1
+group: apps
+instance_group: apps
+deployment_env: QA
+#security_group_name: app_servers
+...

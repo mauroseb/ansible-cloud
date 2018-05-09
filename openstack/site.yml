@@ -1,0 +1,46 @@
+---
+- name: Create OSP env
+  #become: yes
+  hosts: all
+  roles:
+    - osp_net
+    - osp_keypair
+    - osp_flavor
+    - osp_secgroup
+  tasks:
+
+  - name: OSP APP - Create frontend instance
+    include_role:
+       name: osp_instance
+       vars_from: frontends.yml
+    tags:
+      - osp_app_frontend
+
+  - name: OSP APP - Create app1 instance
+    include_role:
+       name: osp_instance
+       vars_from: app1.yml
+    tags:
+      - osp_app_app1
+
+  - name: OSP APP - Create app2 instance
+    include_role:
+       name: osp_instance
+       vars_from: app2.yml
+    tags:
+      - osp_app_app2
+
+  - name: OSP APP - Create DB instance
+    include_role:
+       name: osp_instance
+       vars_from: dbs.yml
+    tags:
+      - osp_app_db
+
+  - name: OSP APP - OSP in-memory inventory
+    include_role:
+       name: osp_inventory
+    tags:
+      - osp_app_inventory
+
+...
