@@ -1,4 +1,4 @@
-# Ansible OpenStack Smoke-test
+# Ansible OpenStack Smoke Test
 
 ## Test
 
