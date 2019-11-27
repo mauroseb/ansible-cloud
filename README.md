@@ -1,6 +1,6 @@
 # Ansible OpenStack Smoke Test
 
-## Test
+## Usage
 
 1. Clone in bastion host
 
