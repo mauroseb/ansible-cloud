@@ -33,5 +33,5 @@ clouds:
 
 4. Run
 
-    $ export OS_CLOUD=overcloud
-    $ ansible-playbook site.yml
+        $ export OS_CLOUD=overcloud
+        $ ansible-playbook site.yml
