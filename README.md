@@ -4,7 +4,7 @@
 
 1. Clone in bastion host
 
-    $ git clone https://github.com/mauroseb/ansible-cloud
+        $ git clone https://github.com/mauroseb/ansible-cloud
     
 2. Edit ssh.cfg and osp_inventory_hosts (alternatively group_vars/all also points to the stack name ```overcloud``` in this csae)
 
