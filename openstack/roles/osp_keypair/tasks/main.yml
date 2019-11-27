@@ -5,7 +5,7 @@
     cloud: "{{ cloud_conn_name }}"
     state: present
     name: testkey1
-    public_key_file: /tmp/id_rsa.pub
+    public_key_file: "{{ keypair_pub }}"
   tags:
     - osp_keypair_create_key
 ...
