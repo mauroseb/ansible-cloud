@@ -1,11 +1,22 @@
 ---
 # OSP KEYPAIR Role
-- name: OSP KEYPAIR - Ensure key is loaded
+- name: OSP KEYPAIR - Ensure pub key file exists
+  stat:
+    path:  "{{ keypair_pub }}"
+  register: pubkeyfile
+  
+- name: OSP KEYPAIR - Fail if key file does not exist.
+  fail:
+    msg: "Public key file {{ keypair_pub }} does not exist. Create one and re-run the playbook."
+  when: pubkeyfile.stat.islnk is not defined
+  
+- name: OSP KEYPAIR - Ensure keypair is loaded as testkey1 
   os_keypair:
     cloud: "{{ cloud_conn_name }}"
     state: present
     name: testkey1
     public_key_file: "{{ keypair_pub }}"
+  when: pubkeyfile.stat.islnk is defined
   tags:
     - osp_keypair_create_key
 ...
