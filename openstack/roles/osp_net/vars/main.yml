@@ -1,0 +1,8 @@
+---
+net_name_ext: external
+subnet_name_ext: extsubnet
+net_name_int: internal
+subnet_name_int_ipv4: intsubnet_ipv4
+subnet_name_int_ipv5: intsubnet_ipv6
+router_name: router1
+...

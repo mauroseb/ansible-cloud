@@ -4,9 +4,10 @@
   os_network:
     cloud: "{{ cloud_conn_name }}"
     state: present
-    name: ext_network
+    name: "{{ net_name_ext }}"
     external: true
   register: osp_net_ext_net_res
+  check_mode: yes
   tags:
     - osp_net_ext_net
 
@@ -14,8 +15,8 @@
   os_subnet:
     cloud: "{{ cloud_conn_name }}"
     state: present
-    network_name: ext_network
-    name: external_subnet
+    network_name: "{{ net_name_ext }}"
+    name: "{{ subnet_name_ext }}"
     cidr: 10.10.10.0/24
     dns_nameservers:
        - 8.8.8.7
@@ -34,7 +35,7 @@
   os_network:
     cloud: "{{ cloud_conn_name }}"
     state: present
-    name: int_network
+    name: "{{ net_name_int }}"
     external: false
   register: osp_net_int_net_res
   tags:
@@ -44,8 +45,8 @@
   os_subnet:
     cloud: "{{ cloud_conn_name }}"
     state: present
-    network_name: int_network
-    name: int_subnet
+    network_name: "{{ net_name_int }}"
+    name: "{{ subnet_name_int }}"
     cidr: 20.20.20.0/24
     dns_nameservers:
        - 8.8.8.7
@@ -64,12 +65,12 @@
   os_router:
     cloud: "{{ cloud_conn_name }}"
     state: present
-    name: router1
-    network: ext_network
+    name: "{{ router_name }}"
+    network: "{{ net_name_ext }}"
     external_fixed_ips:
-      - subnet: external_subnet
+      - subnet: "{{ subnet_name_ext }}"
     interfaces:
-      - int_subnet
+      - "{{ subnet_name_int }}"
 #  when: osp_net_int_subnet_res.rc == 0 and osp_net_ext_subnet_res.rc == 0
   tags:
     - osp_net_router_create

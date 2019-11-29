@@ -1,22 +1,30 @@
 ---
 # OSP KEYPAIR Role
-- name: OSP KEYPAIR - Ensure pub key file exists
-  stat:
-    path:  "{{ keypair_pub }}"
-  register: pubkeyfile
-  
-- name: OSP KEYPAIR - Fail if key file does not exist.
-  fail:
-    msg: "Public key file {{ keypair_pub }} does not exist. Create one and re-run the playbook."
-  when: pubkeyfile.stat.islnk is not defined
-  
-- name: OSP KEYPAIR - Ensure keypair is loaded as testkey1 
-  os_keypair:
-    cloud: "{{ cloud_conn_name }}"
-    state: present
-    name: testkey1
-    public_key_file: "{{ keypair_pub }}"
-  when: pubkeyfile.stat.islnk is defined
+- name: OSP KEYPAIR - Locate or create keys and upload to Openstack
+  block:
+    - name: OSP KEYPAIR - Check if keypair already exists
+      stat:
+        path:  "{{ keypair_pub }}"
+      register: pubkeyfile
+
+    - name: OSP KEYPAIR - Fail if key file does not exist
+      fail:
+        msg: "Public key file {{ keypair_pub }} does not exist. Create one and re-run the playbook."
+      when: pubkeyfile.stat.islnk is not defined
+
+  rescue:
+    - name: OSP KEYPAIR - Create key if it does not exist
+      shell: ssh-keygen -t rsa -N "{{ keypair_name }}" -b 4096 -f "{{ keypair_priv }}"
+
+  always:
+    - name: OSP KEYPAIR - Ensure keypair is loaded as "{{ keypair_name }}"
+      os_keypair:
+        cloud: "{{ cloud_conn_name }}"
+        state: present
+        name: "{{ keypair_name }}"
+        public_key_file: "{{ keypair_pub }}"
+      when: pubkeyfile.stat.islnk is defined
+
   tags:
-    - osp_keypair_create_key
+    - osp_keypair_upload
 ...
