@@ -5,6 +5,7 @@
     - name: OSP KEYPAIR - Check if keypair already exists
       stat:
         path:  "{{ keypair_pub }}"
+      delegate: localhost
       register: pubkeyfile
 
     - name: OSP KEYPAIR - Fail if key file does not exist
@@ -17,6 +18,8 @@
       shell: ssh-keygen -t rsa -N "{{ keypair_name }}" -b 4096 -f "{{ keypair_priv }}"
 
   always:
+      delegate: localhost
+
     - name: OSP KEYPAIR - Ensure keypair is loaded as "{{ keypair_name }}"
       os_keypair:
         cloud: "{{ cloud_conn_name }}"
