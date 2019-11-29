@@ -15,7 +15,7 @@
 
   rescue:
     - name: OSP KEYPAIR - Create key if it does not exist
-      shell: ssh-keygen -t rsa -N "{{ keypair_name }}" -b 4096 -f "{{ keypair_priv }}"
+      shell: "ssh-keygen -t rsa -N {{ keypair_name }} -b 4096 -f {{ keypair_priv }}"
 
   always:
       delegate: localhost
