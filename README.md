@@ -4,11 +4,11 @@
 
 1. Clone in bastion host
 
-        $ git clone https://github.com/mauroseb/ansible-cloud
+        $ git clone https://github.com/mauroseb/ansible-osp-smoketest
     
 2. Edit ssh.cfg and osp_inventory_hosts to match your environment configuration. Alternatively you may need to edit group_vars/all also points to the stack name ```overcloud``` in this csae.
 
-3. Edit your /etc/openstack/clouds.yaml
+3. Edit your /etc/openstack/clouds.yaml or ~/.config/openstack/clouds.yaml:
 ~~~
 clouds:
  undercloud:
