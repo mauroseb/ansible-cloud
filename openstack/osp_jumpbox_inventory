@@ -1,2 +1,2 @@
 [jumpbox]
-{{ jumphost }} ansible_ssh_user=cloud-user ansible_ssh_private_key_file=~/.ssh/openstack.pem
+{{ jumphost_name }} ansible_ssh_user={{ jumphost_user }} ansible_ssh_private_key_file={{ jumphost_privkey }}
