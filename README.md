@@ -6,7 +6,7 @@
 
         $ git clone https://github.com/mauroseb/ansible-osp-smoketest
     
-2. Edit ssh.cfg and osp_inventory_hosts to match your environment configuration. Alternatively you may need to edit group_vars/all also points to the stack name ```overcloud``` in this csae.
+2. Edit ssh.cfg and osp_inventory_hosts to match your environment configuration. Alternatively you may need to edit group_vars/all also points to the stack name ```overcloud```.
 
 3. Edit your /etc/openstack/clouds.yaml or ~/.config/openstack/clouds.yaml to point to OpenStack cloud. Latest versions of RHOSP already generate this file in the stack home directory of the undercloud node so you can just copy it to your ansible node:
 ~~~
